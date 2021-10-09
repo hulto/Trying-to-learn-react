@@ -4,3 +4,5 @@ services:
         build: ./todo-app/
         volumes:
             - ./todo-app/:/app/
+        ports:
+            - 8080:8080
