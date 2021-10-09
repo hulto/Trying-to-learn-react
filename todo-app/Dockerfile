@@ -1,5 +1,9 @@
 FROM node:latest
 WORKDIR /app
-COPY ./* ./
+
+RUN npm init -y
+COPY ./package.json ./
 RUN npm install
+
+COPY ./* ./
 CMD ["npm", "start"]
