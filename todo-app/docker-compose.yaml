@@ -8,6 +8,8 @@ services:
             - mongo
     ui:
         build: ./ui/
+        volumes:
+            - "./ui/:/app"
         ports:
             - 3000:3000
         depends_on:
