@@ -4,3 +4,10 @@ services:
         build: ./todo-app/
         ports:
             - 8080:8080
+        depends_on:
+            - mongo
+    mongo:
+        image: mongo:latest
+        environment: 
+            - MONGO_INITDB_ROOT_USERNAME=todoappuser
+            - MONGO_INITDB_ROOT_PASSWORD=password123
