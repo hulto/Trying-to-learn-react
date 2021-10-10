@@ -4,13 +4,18 @@ import axios from 'axios';
 import './App.css';
 import 'semantic-ui-css/semantic.min.css'
 import { Button, Icon, Tab, Table, Menu } from 'semantic-ui-react'
+import MyPagination from './components/pagination';
 
 const apiUrl = `http://localhost:8080`;
 
 function App() {
+  let usersPerPage = 5;
   const [users, setUsers] = useState([]);
-  const startingpagenum = 0;
-  const [page, setPage] = useState(startingpagenum);
+  const [page, setPage] = useState(0);
+  let usersShown = users.slice(page * usersPerPage, (page + 1) * usersPerPage);
+  let pagesCount = Math.ceil(users.length/usersPerPage) || 1; 
+  
+
 
   useEffect(() => {
     loadUsers();
@@ -32,6 +37,8 @@ function App() {
   const loadUsers = async () => {
     const res = await axios.get(apiUrl + '/users');
     setUsers(res.data);
+    let count = Math.ceil(res.data.length/usersPerPage);
+    setPage(count -1);
   }
       console.log(users.length)
       return (
@@ -50,8 +57,7 @@ function App() {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {users.slice(page*5,((page+1)*5)).map((user,i) => {
-                  console.log(page);
+                {usersShown.map( (user, i)  => {
                   return(
                   <Table.Row key={i}>
                     <Table.Cell>{user._id}</Table.Cell>
@@ -64,17 +70,18 @@ function App() {
               <Table.Footer>
                 <Table.Row>
                   <Table.HeaderCell colSpan='3'>
-                    <Menu floated='right' pagination>
+                    <MyPagination activePage={page} setPageRef={setPage} pagesCount={pagesCount}></MyPagination>
+                    {/* <Menu floated='right' pagination>
                       <Menu.Item as='a' icon>
                         <Icon name='chevron left' />
                       </Menu.Item>
-                      {range(1,7).map((val,i) => (
+                      {(range(1, pagesCount )).map((val,i) => (
                       <Menu.Item onClick={() => setPage(i)}>{val}</Menu.Item>
                       ))}
                       <Menu.Item as='a' icon>
                         <Icon name='chevron right' />
                       </Menu.Item>
-                    </Menu>
+                    </Menu> */}
                   </Table.HeaderCell>
                 </Table.Row>
               </Table.Footer>
