@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+    api:
+        build: ./api/
+        ports:
+            - 8080:8080
+        depends_on:
+            - neo4j
+    ui:
+        build: ./ui/
+        volumes:
+            - "./ui/:/app"
+        ports:
+            - 3000:3000
+        depends_on:
+            - api
+    neo4j:
+        image: neo4j:latest
+        environment: 
+            - NEO4J_AUTH=neo4j/newPassword
+
